@@ -1,0 +1,27 @@
+package com.lipari.Academy2026.service.impl;
+
+import com.lipari.Academy2026.dto.UserDTO;
+import com.lipari.Academy2026.entity.UserEntity;
+import com.lipari.Academy2026.model.UserPrincipal;
+import com.lipari.Academy2026.repository.UserRepositry;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserDetailsServiceImpl implements UserDetailsService {
+
+    @Autowired
+    private UserRepositry userRepositry;
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity user = userRepositry.findByName(username);
+        if (user == null){
+            //System.out.println("User Not Found");
+            throw new UsernameNotFoundException("user not found");
+        }
+        return new UserPrincipal(user);
+    }
+}
