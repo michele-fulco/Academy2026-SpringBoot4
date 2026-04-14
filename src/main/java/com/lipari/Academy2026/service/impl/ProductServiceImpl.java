@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-    public ProductDTO getProduct(String id) throws Exception {
+    public ProductDTO getProduct(Long id) throws Exception {
 
         Optional<ProductEntity> op = this.productRepository.findById(id);
         if(op.isPresent()) {
@@ -69,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void removeProduct(String id) throws Exception {
+    public void removeProduct(Long id) throws Exception {
         Optional<ProductEntity> op = this.productRepository.findById(id);
         if (op.isPresent()){
             productRepository.deleteById(id);
@@ -80,8 +80,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getProductsByName(String name) {
-        List<ProductEntity> list = this.productRepository.findByNameContainingIgnoreCase(name);
+    public List<ProductDTO> getProductsByTitle(String title) {
+        List<ProductEntity> list = this.productRepository.findByTitleContainingIgnoreCase(title);
         return this.productMapper.toDtoList(list);
 
     }

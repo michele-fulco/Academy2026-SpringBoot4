@@ -12,7 +12,7 @@ public class ProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
     String title;
     String description;
     BigDecimal oldPrice;

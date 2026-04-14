@@ -20,7 +20,7 @@ public class ProductController {
     ProductService productService;
 
     @GetMapping("/product/{id}")
-    public ResponseEntity<ProductDTO> getProduct(@PathVariable String id) {
+    public ResponseEntity<ProductDTO> getProduct(@PathVariable Long id) {
 
         try {
             return new ResponseEntity<>(this.productService.getProduct(id), HttpStatus.OK);
@@ -49,7 +49,7 @@ public class ProductController {
     @PutMapping("/update")
     public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO) {
         try {
-            if (productDTO.getId().isEmpty() || productDTO.getName().isEmpty()) {
+            if (productDTO.getId()!=0 || productDTO.getTitle().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
             return ResponseEntity.ok(this.productService.updateProduct(productDTO));
@@ -61,7 +61,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         try {
             this.productService.removeProduct(id);
             return ResponseEntity.ok().build();
@@ -71,10 +71,10 @@ public class ProductController {
 
     }
 
-    @GetMapping("/get/{name}")
-    public ResponseEntity<List<ProductDTO>> getProductsByName(@PathVariable String name) {
-        if (name != null) {
-            return new ResponseEntity<>(this.productService.getProductsByName(name), HttpStatus.OK);
+    @GetMapping("/get/{title}")
+    public ResponseEntity<List<ProductDTO>> getProductsByName(@PathVariable String title) {
+        if (title != null) {
+            return new ResponseEntity<>(this.productService.getProductsByTitle(title), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }

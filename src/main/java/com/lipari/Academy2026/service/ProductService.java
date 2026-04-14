@@ -7,17 +7,17 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface ProductService {
-    
 
-    public ProductDTO getProduct(String id) throws Exception;
+
+    public ProductDTO getProduct(Long id) throws Exception;
 
     public List<ProductDTO> getProducts();
 
     public ProductDTO updateProduct(ProductDTO productDTO) throws Exception;
 
-    public void removeProduct(String id) throws Exception;
+    public void removeProduct(Long id) throws Exception;
 
-    public List<ProductDTO> getProductsByName(String name);
+    public List<ProductDTO> getProductsByTitle(String title);
 
     public ProductDTO newProduct(String title, String description, BigDecimal oldPrice, BigDecimal price, String brand, String image, Boolean isNew, CategoryDTO category);
 }
