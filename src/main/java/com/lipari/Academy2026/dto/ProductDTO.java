@@ -12,7 +12,7 @@ public class ProductDTO {
     BigDecimal oldPrice;
     BigDecimal price;
     String brand;
-    String image;
+    String imageUrl;
     Boolean isNew;
     CategoryDTO category;
 }

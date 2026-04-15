@@ -65,13 +65,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void removeProduct(Long id) throws Exception {
-        Optional<ProductEntity> op = this.productRepository.findById(id);
-        if (op.isPresent()){
-            productRepository.deleteById(id);
-        }
-        else {
+        if (!productRepository.existsById(id)) {
             throw new Exception("Prodotto da eliminare non trovato");
         }
+        productRepository.deleteById(id);
     }
     @Override
     public List<ProductDTO> getProductsByTitle(String title) {
