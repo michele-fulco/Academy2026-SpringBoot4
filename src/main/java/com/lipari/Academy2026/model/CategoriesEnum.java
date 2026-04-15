@@ -1,0 +1,14 @@
+package com.lipari.Academy2026.model;
+
+enum CategoryEnum {
+    ELETTRONICA,
+    ABBIGLIAMENTO,
+    CASA_GIARDINO,
+    SPORT_TEMPO_LIBERO,
+    BELLEZZA_SALUTE,
+    ALIMENTARI,
+    LIBRI_MEDIA,
+    GIOCHI_BAMBINI,
+    AUTO_MOTO,
+    UFFICIO_CANCELLERIA
+}

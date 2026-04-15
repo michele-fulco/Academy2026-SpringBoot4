@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -14,11 +13,13 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String title;
+    @Column(name="des")
     String description;
-    BigDecimal oldPrice;
+    BigDecimal oldPrice; //numeric 2 cif dec.
     BigDecimal price;
     String brand;
-    String image;
+    @Column(name="image")
+    String imageUrl;
     Boolean isNew;
     /*@ManyToOne
     @JoinColumn(name = "user_id") //rinumona : seller id

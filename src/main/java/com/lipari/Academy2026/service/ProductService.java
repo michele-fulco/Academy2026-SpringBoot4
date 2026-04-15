@@ -19,5 +19,5 @@ public interface ProductService {
 
     public List<ProductDTO> getProductsByTitle(String title);
 
-    public ProductDTO newProduct(String title, String description, BigDecimal oldPrice, BigDecimal price, String brand, String image, Boolean isNew, CategoryDTO category);
+    public ProductDTO newProduct(ProductDTO productDTO);
 }

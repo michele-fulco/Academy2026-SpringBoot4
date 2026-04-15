@@ -43,7 +43,7 @@ public class ProductController {
 
     @PostMapping("/new")
     public ResponseEntity<ProductDTO> newProduct(@RequestBody ProductDTO productDTO) {
-        return ResponseEntity.ok(this.productService.newProduct(productDTO.getTitle(), productDTO.getDescription(), productDTO.getOldPrice(), productDTO.getPrice(), productDTO.getBrand(), productDTO.getImage(), productDTO.getIsNew(), productDTO.getCategory()));
+        return ResponseEntity.ok(this.productService.newProduct(productDTO));
     }
 
     @PutMapping("/update")

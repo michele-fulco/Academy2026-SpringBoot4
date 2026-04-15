@@ -19,8 +19,8 @@ un admin deve poter
     gestire gli ordini (nice-to-have)
 Must have: 
 Utente
-    vedere i prodotti in home (must-have)
-    entrare nella pagina di dettaglio del prodotto (must-have)
+    vedere i prodotti in home (must-have) x
+    entrare nella pagina di dettaglio del prodotto (must-have) x
     metterlo in carrello (must-have)
     conferma e paga il carrello (must-have)
 Admin

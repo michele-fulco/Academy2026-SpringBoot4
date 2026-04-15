@@ -2,10 +2,12 @@ package com.lipari.Academy2026.service.impl;
 
 import com.lipari.Academy2026.dto.CategoryDTO;
 import com.lipari.Academy2026.dto.ProductDTO;
+import com.lipari.Academy2026.entity.CategoryEntity;
 import com.lipari.Academy2026.entity.ProductEntity;
 import com.lipari.Academy2026.mapper.ProductMapper;
 import com.lipari.Academy2026.repository.ProductRepository;
 import com.lipari.Academy2026.service.ProductService;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +24,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductMapper productMapper;
 
-    public ProductDTO newProduct(String title, String description, BigDecimal oldPrice, BigDecimal price, String brand, String image, Boolean isNew, CategoryDTO category) {
+    public ProductDTO newProduct(ProductDTO productDTO) {
 
-        ProductEntity p = new ProductEntity();
-        p.setBrand(brand);
-        p.setCategory(null);
-        p.setImage(null);
-        p.setTitle(title);
-        p.setOldPrice(oldPrice);
-        p.setPrice(price);
-        p.setDescription(description);
+        ProductEntity p = this.productMapper.toEntity(productDTO);
 
         p = this.productRepository.save(p);
 
@@ -78,12 +73,8 @@ public class ProductServiceImpl implements ProductService {
             throw new Exception("Prodotto da eliminare non trovato");
         }
     }
-
     @Override
     public List<ProductDTO> getProductsByTitle(String title) {
-        List<ProductEntity> list = this.productRepository.findByTitleContainingIgnoreCase(title);
-        return this.productMapper.toDtoList(list);
-
+        return this.productMapper.toDtoList(this.productRepository.findByTitleContainingIgnoreCase(title));
     }
-
 }

@@ -23,4 +23,15 @@
             <column name="name"/>
         </dropColumn>
     </changeSet>
+    <changeSet id="20260415-01" author="academy">
+        <renameColumn tableName="product_entity" oldColumnName="isNew" newColumnName="is_new" columnDataType="BOOLEAN" />
+        <renameColumn tableName="product_entity" oldColumnName="oldPrice" newColumnName="old_price" columnDataType="INT"/>
+    </changeSet>
+    <changeSet id="20260415-02" author="academy">
+        <addColumn tableName="product_entity">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
