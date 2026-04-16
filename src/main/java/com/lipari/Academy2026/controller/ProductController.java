@@ -19,11 +19,11 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @GetMapping("/product/{id}")
-    public ResponseEntity<ProductDTO> getProduct(@PathVariable Long id) {
+    @GetMapping("/product")
+    public ResponseEntity<ProductDTO> getProduct(@RequestParam Long t) {
 
         try {
-            return new ResponseEntity<>(this.productService.getProduct(id), HttpStatus.OK);
+            return new ResponseEntity<>(this.productService.getProduct(t), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

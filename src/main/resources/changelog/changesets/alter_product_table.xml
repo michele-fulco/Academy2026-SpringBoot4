@@ -34,4 +34,10 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="20260416-01" author="academy">
+        <renameColumn tableName="product_entity"
+                      oldColumnName="image"
+                      newColumnName="image_url"
+                      columnDataType="VARCHAR(255)"/>
+    </changeSet>
 </databaseChangeLog>
