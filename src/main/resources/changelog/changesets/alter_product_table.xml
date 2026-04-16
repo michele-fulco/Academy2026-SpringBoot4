@@ -34,4 +34,12 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="20260416-01" author="academy">
+        <modifyDataType tableName="product_entity"
+                        columnName="old_price"
+                        newDataType="NUMERIC(10,2)"/>
+        <modifyDataType tableName="product_entity"
+                        columnName="price"
+                        newDataType="NUMERIC(10,2)"/>
+    </changeSet>
 </databaseChangeLog>

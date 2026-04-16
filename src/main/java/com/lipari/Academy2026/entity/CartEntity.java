@@ -11,8 +11,8 @@ import java.util.List;
 public class CartEntity {
     /*
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     LocalDateTime createdAt;
     @ManyToMany(mappedBy = "carts")
     List<ProductEntity> productEntityList;
