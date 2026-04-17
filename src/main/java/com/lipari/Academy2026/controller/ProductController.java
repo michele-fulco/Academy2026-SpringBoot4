@@ -3,6 +3,7 @@ package com.lipari.Academy2026.controller;
 import com.lipari.Academy2026.dto.ProductDTO;
 import com.lipari.Academy2026.entity.ProductEntity;
 import com.lipari.Academy2026.service.ProductService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,14 +43,18 @@ public class ProductController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<ProductDTO> newProduct(@RequestBody ProductDTO productDTO) {
-        return ResponseEntity.ok(this.productService.newProduct(productDTO));
+    public ResponseEntity<ProductDTO> newProduct(@Valid @RequestBody ProductDTO productDTO) {
+        try {
+            return ResponseEntity.ok(this.productService.newProduct(productDTO));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
     }
 
     @PutMapping("/update")
     public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO) {
         try {
-            if (productDTO.getId()!=0 || productDTO.getTitle().isEmpty()) {
+            if (productDTO.getId()==null || productDTO.getTitle().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
             return ResponseEntity.ok(this.productService.updateProduct(productDTO));

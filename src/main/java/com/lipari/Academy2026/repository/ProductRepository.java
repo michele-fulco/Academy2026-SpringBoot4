@@ -11,15 +11,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProductRepository extends JpaRepository<ProductEntity, String> {
+public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 //    @Query("SELECT p FROM ProductEntity p WHERE "+
 //            "LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))")
 //    List<ProductEntity> searchProducts(String name);
     List<ProductEntity> findByTitleContainingIgnoreCase(String name);
     /*@Query("SELECT p FROM ProductEntity p WHERE p.id = :id")
     ProductEntity findByIdLong(@Param("id") Long id);*/
-    Optional<ProductEntity> findById(Long id);
-    ProductEntity findByTitleIgnoreCase(String title);
-    void deleteById(Long id);
+    //Optional<ProductEntity> findById(Long id);
+    Optional<ProductEntity> findByTitleIgnoreCase(String title);
+    //void deleteById(Long id);
 
 }
