@@ -21,10 +21,10 @@ public class ProductController {
     ProductService productService;
 
     @GetMapping("/product")
-    public ResponseEntity<ProductDTO> getProduct(@RequestParam Long id) {
+    public ResponseEntity<ProductDTO> getProduct(@RequestParam Long t) {
 
         try {
-            return new ResponseEntity<>(this.productService.getProduct(id), HttpStatus.OK);
+            return new ResponseEntity<>(this.productService.getProduct(t), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

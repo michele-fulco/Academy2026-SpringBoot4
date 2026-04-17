@@ -15,12 +15,12 @@ public class ProductEntity {
     Long id;
     @NotEmpty
     String title;
-    @Column(name="des")
+    @Column(name="description")
     String description;
     BigDecimal oldPrice; //numeric 2 cif dec.
     BigDecimal price;
     String brand;
-    @Column(name="image")
+    @Column(name="image_url")
     String imageUrl;
     Boolean isNew;
     /*@ManyToOne

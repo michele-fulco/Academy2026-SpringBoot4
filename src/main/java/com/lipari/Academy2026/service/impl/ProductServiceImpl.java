@@ -25,13 +25,19 @@ public class ProductServiceImpl implements ProductService {
     ProductMapper productMapper;
 
     public ProductDTO newProduct(ProductDTO productDTO) {
+        System.out.println("DTO ricevuto: " + productDTO);
+        System.out.println("imageUrl nel DTO: " + productDTO.getImageUrl());
 
         ProductEntity p = this.productMapper.toEntity(productDTO);
 
+        System.out.println("Entity prima del save: " + p);
+        System.out.println("imageUrl nell'entity: " + p.getImageUrl());
+
         p = this.productRepository.save(p);
 
-        return this.productMapper.toDto(p);
+        System.out.println("Entity dopo il save: " + p);
 
+        return this.productMapper.toDto(p);
     }
 
     public ProductDTO getProduct(Long id) throws Exception {
