@@ -13,6 +13,7 @@
         </createTable>
     </changeSet>
 
-    <include file="/changesets/create_user_table.xml" relativeToChangelogFile="true"/>
-    <include file="/changesets/alter_product_table.xml" relativeToChangelogFile="true"/>
+    <include file="changesets/create_user_table.xml" relativeToChangelogFile="true"/>
+    <include file="changesets/alter_product_table.xml" relativeToChangelogFile="true"/>
+    <include file="/changesets/create_order_and_cart_table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

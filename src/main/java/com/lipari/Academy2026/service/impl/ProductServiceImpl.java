@@ -5,6 +5,7 @@ import com.lipari.Academy2026.dto.ProductDTO;
 import com.lipari.Academy2026.entity.CategoryEntity;
 import com.lipari.Academy2026.entity.ProductEntity;
 import com.lipari.Academy2026.mapper.ProductMapper;
+import com.lipari.Academy2026.repository.CategoryRepository;
 import com.lipari.Academy2026.repository.ProductRepository;
 import com.lipari.Academy2026.service.ProductService;
 import jakarta.annotation.Nullable;
@@ -22,21 +23,15 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
 
     @Autowired
+    CategoryRepository categoryRepository;
+
+    @Autowired
     ProductMapper productMapper;
 
     public ProductDTO newProduct(ProductDTO productDTO) {
-        System.out.println("DTO ricevuto: " + productDTO);
-        System.out.println("imageUrl nel DTO: " + productDTO.getImageUrl());
-
         ProductEntity p = this.productMapper.toEntity(productDTO);
-
-        System.out.println("Entity prima del save: " + p);
-        System.out.println("imageUrl nell'entity: " + p.getImageUrl());
-
+        p.setCategory(resolveCategory(productDTO.getCategory()));
         p = this.productRepository.save(p);
-
-        System.out.println("Entity dopo il save: " + p);
-
         return this.productMapper.toDto(p);
     }
 
@@ -61,7 +56,9 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO updateProduct(ProductDTO productDTO) throws Exception{
         Optional<ProductEntity> op = this.productRepository.findById(productDTO.getId());
         if (op.isPresent()){
-            ProductEntity temp = productRepository.save(this.productMapper.toEntity(productDTO));
+            ProductEntity p = this.productMapper.toEntity(productDTO);
+            p.setCategory(resolveCategory(productDTO.getCategory()));
+            ProductEntity temp = productRepository.save(p);
             return this.productMapper.toDto(temp);
         }
         else {
@@ -77,7 +74,26 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
     }
     @Override
+
     public List<ProductDTO> getProductsByTitle(String title) {
         return this.productMapper.toDtoList(this.productRepository.findByTitleContainingIgnoreCase(title));
+    }
+
+    //Utils
+    private CategoryEntity resolveCategory(CategoryDTO categoryDTO) {
+        CategoryEntity category = null;
+        if (categoryDTO != null && categoryDTO.getName() != null) {
+            category = categoryRepository.findByNameIgnoreCase(categoryDTO.getName());
+        }
+
+        if (category == null) {
+            category = categoryRepository.findByNameIgnoreCase("Misc.");
+            if (category == null) {
+                category = new CategoryEntity();
+                category.setName("Misc.");
+                category = categoryRepository.save(category);
+            }
+        }
+        return category;
     }
 }
