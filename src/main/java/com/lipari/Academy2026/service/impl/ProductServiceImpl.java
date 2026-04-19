@@ -8,6 +8,7 @@ import com.lipari.Academy2026.mapper.ProductMapper;
 import com.lipari.Academy2026.repository.ProductRepository;
 import com.lipari.Academy2026.service.ProductService;
 import jakarta.annotation.Nullable;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +59,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductDTO updateProduct(ProductDTO productDTO) throws Exception{
         Optional<ProductEntity> op = this.productRepository.findById(productDTO.getId());
         if (op.isPresent()){
@@ -70,6 +72,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void removeProduct(Long id) throws Exception {
         Optional<ProductEntity> op = this.productRepository.findById(id);
         if (op.isPresent()){
