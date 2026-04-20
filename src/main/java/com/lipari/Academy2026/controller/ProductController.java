@@ -56,7 +56,6 @@ public class ProductController {
         try {
             // 1. Sostituisci il vecchio controllo IF con questo:
             if (productDTO.getId() == null || productDTO.getId() <= 0 || productDTO.getTitle().isEmpty()) {
-            if (productDTO.getId()==null || productDTO.getTitle().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
 
