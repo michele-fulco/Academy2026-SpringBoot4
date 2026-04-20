@@ -14,6 +14,10 @@ public class OrderEntity {
 
     private java.time.LocalDateTime creationDate;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartEntity> cartEntityList;
 

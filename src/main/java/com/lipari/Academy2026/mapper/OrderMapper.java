@@ -20,7 +20,6 @@ public interface OrderMapper {
     @Mapping(source = "items", target = "cartEntityList")
     OrderEntity toEntity(OrderDTO orderDTO);
 
-    // Helper mapping for Cart
     CartDTO cartToCartDto(CartEntity cartEntity);
     CartEntity cartDtoToCartEntity(CartDTO cartDTO);
 }

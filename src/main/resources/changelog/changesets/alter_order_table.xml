@@ -5,4 +5,14 @@
             <column name="creation_date" type="datetime(6)"/>
         </addColumn>
     </changeSet>
+    <changeSet author="academy" id="1776561091290-2">
+        <addColumn tableName="order_entity">
+            <column name="user_id" type="varchar(255)"/>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="order_entity"
+                                 constraintName="FK_order_user"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_entity"/>
+    </changeSet>
 </databaseChangeLog>
