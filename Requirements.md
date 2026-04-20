@@ -24,11 +24,11 @@ Utente
     metterlo in carrello (must-have)
     conferma e paga il carrello (must-have)
 Admin
-    creare un prodotto (must-have)
-    modificare un prodotto (must-have)
-    visualizzare l'elenco dei prodotti (must-have)
+    creare un prodotto (must-have) x
+    modificare un prodotto (must-have) x
+    visualizzare l'elenco dei prodotti (must-have) x
     gestire le categorie (must-have)
-    assegnare un prodotto ad una categoria (must-have)
+    assegnare un prodotto ad una categoria (must-have) x
 
 Nice to have:
 Utente
