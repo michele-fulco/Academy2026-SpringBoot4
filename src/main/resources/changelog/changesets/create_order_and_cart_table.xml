@@ -1,0 +1,147 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="academy" id="1776550232831-4">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cart_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cart_entity">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="cart_entityPK"/>
+            </column>
+            <column name="created_at" type="datetime(6)"/>
+            <column name="quantity" type="INT"/>
+            <column name="order_id" type="BIGINT"/>
+            <column name="product_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-5">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="order_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="order_entity">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="order_entityPK"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-6">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="user_entity" columnName="active"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="user_entity">
+            <column name="active" type="bit"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-7">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="user_entity" columnName="creation_date"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="user_entity">
+            <column name="creation_date" type="datetime(6)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-8">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="product_entity" columnName="description"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="product_entity">
+            <column name="description" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-9">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="product_entity" columnName="image_url"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="product_entity">
+            <column name="image_url" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-10">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="user_entity" columnName="last_login"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="user_entity">
+            <column name="last_login" type="datetime(6)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-11">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FKdjpjq4qgt7k0w8xofh30arev9"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="product_id" baseTableName="cart_entity" constraintName="FKdjpjq4qgt7k0w8xofh30arev9" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="product_entity" validate="true"/>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-12">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FKe5rowl9srrvo1uii368s40ufh"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="cart_entity" constraintName="FKe5rowl9srrvo1uii368s40ufh" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="order_entity" validate="true"/>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-13">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="test_table"/>
+        </preConditions>
+        <dropTable tableName="test_table"/>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-14">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="product_entity" columnName="category"/>
+        </preConditions>
+        <dropColumn columnName="category" tableName="product_entity"/>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-15">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="product_entity" columnName="des"/>
+        </preConditions>
+        <dropColumn columnName="des" tableName="product_entity"/>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-16">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="product_entity" columnName="image"/>
+        </preConditions>
+        <dropColumn columnName="image" tableName="product_entity"/>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-1">
+        <modifyDataType columnName="id" newDataType="varchar(255)" tableName="user_entity"/>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-2">
+        <modifyDataType columnName="old_price" newDataType="decimal(38,2)" tableName="product_entity"/>
+    </changeSet>
+
+    <changeSet author="academy" id="1776550232831-3">
+        <modifyDataType columnName="price" newDataType="decimal(38,2)" tableName="product_entity"/>
+    </changeSet>
+
+</databaseChangeLog>

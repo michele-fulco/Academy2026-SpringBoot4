@@ -35,11 +35,9 @@
         </addColumn>
     </changeSet>
     <changeSet id="20260416-01" author="academy">
-        <modifyDataType tableName="product_entity"
-                        columnName="old_price"
-                        newDataType="NUMERIC(10,2)"/>
-        <modifyDataType tableName="product_entity"
-                        columnName="price"
-                        newDataType="NUMERIC(10,2)"/>
+        <renameColumn tableName="product_entity"
+                      oldColumnName="image"
+                      newColumnName="image_url"
+                      columnDataType="VARCHAR(255)"/>
     </changeSet>
 </databaseChangeLog>

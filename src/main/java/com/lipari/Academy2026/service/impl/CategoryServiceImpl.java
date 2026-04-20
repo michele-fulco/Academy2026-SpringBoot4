@@ -19,6 +19,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryMapper categoryMapper;
 
+    @Override
     public CategoryDTO newCategory(String name) {
 
         CategoryEntity p = new CategoryEntity();
@@ -30,7 +31,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     }
 
-    public CategoryDTO getCategory(String id) throws Exception {
+    @Override
+    public CategoryDTO getCategory(Long id) throws Exception {
 
         Optional<CategoryEntity> op = this.categoryRepository.findById(id);
         if(op.isPresent()) {

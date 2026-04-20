@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,12 +16,12 @@ public class ProductEntity {
     Long id;
     @NotEmpty
     String title;
-    @Column(name="des")
+    @Column(name="description")
     String description;
     BigDecimal oldPrice; //numeric 2 cif dec.
     BigDecimal price;
     String brand;
-    @Column(name="image")
+    @Column(name="image_url")
     String imageUrl;
     Boolean isNew;
     /*@ManyToOne
@@ -29,4 +30,6 @@ public class ProductEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
+    @OneToMany(mappedBy = "product")
+    private List<CartEntity> cartEntityList;
 }

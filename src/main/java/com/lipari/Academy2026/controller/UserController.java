@@ -1,8 +1,6 @@
 package com.lipari.Academy2026.controller;
 
-import com.lipari.Academy2026.dto.CategoryDTO;
 import com.lipari.Academy2026.dto.UserDTO;
-import com.lipari.Academy2026.service.CategoryService;
 import com.lipari.Academy2026.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;

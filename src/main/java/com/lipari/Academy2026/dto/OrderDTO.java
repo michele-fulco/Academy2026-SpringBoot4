@@ -1,0 +1,12 @@
+package com.lipari.Academy2026.dto;
+
+import lombok.Data;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Data
+public class OrderDTO {
+    private Long id;
+    private LocalDateTime creationDate;
+    private List<CartDTO> items;
+}

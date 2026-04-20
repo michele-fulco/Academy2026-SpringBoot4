@@ -7,6 +7,6 @@ public interface CategoryService {
 
     public CategoryDTO newCategory(String name);
 
-    public CategoryDTO getCategory(String id) throws Exception;
+    public CategoryDTO getCategory(Long id) throws Exception;
 
 }

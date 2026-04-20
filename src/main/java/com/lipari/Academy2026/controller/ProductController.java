@@ -21,10 +21,10 @@ public class ProductController {
     ProductService productService;
 
     @GetMapping("/product")
-    public ResponseEntity<ProductDTO> getProduct(@RequestParam Long id) {
+    public ResponseEntity<ProductDTO> getProduct(@RequestParam Long t) {
 
         try {
-            return new ResponseEntity<>(this.productService.getProduct(id), HttpStatus.OK);
+            return new ResponseEntity<>(this.productService.getProduct(t), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -54,14 +54,20 @@ public class ProductController {
     @PutMapping("/update")
     public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO) {
         try {
-            if (productDTO.getId()==null || productDTO.getTitle().isEmpty()) {
+            // 1. Sostituisci il vecchio controllo IF con questo:
+            if (productDTO.getId() == null || productDTO.getId() <= 0 || productDTO.getTitle().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
-            return ResponseEntity.ok(this.productService.updateProduct(productDTO));
+
+            // 2. Chiami il service (assicurati che il service abbia @Transactional come detto prima)
+            ProductDTO updatedProduct = this.productService.updateProduct(productDTO);
+
+            return ResponseEntity.ok(updatedProduct);
+
         } catch (Exception e) {
-
+            // Stampa l'errore in console così se fallisce sai perché
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
         }
     }
 
@@ -71,9 +77,9 @@ public class ProductController {
             this.productService.removeProduct(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            e.printStackTrace(); // <--- AGGIUNGI QUESTO per leggere l'errore nel terminale di IntelliJ/Eclipse
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Cambia in 500 per ora
         }
-
     }
 
     @GetMapping("/get/{title}")

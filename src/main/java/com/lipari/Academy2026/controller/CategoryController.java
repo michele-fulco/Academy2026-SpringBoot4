@@ -17,7 +17,7 @@ public class CategoryController {
     CategoryService categoryService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDTO> getCategory(@PathVariable String id) {
+    public ResponseEntity<CategoryDTO> getCategory(@PathVariable Long id) {
 
         try {
             return ResponseEntity.ok(this.categoryService.getCategory(id));
