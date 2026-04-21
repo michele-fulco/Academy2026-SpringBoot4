@@ -2,33 +2,41 @@ package com.lipari.Academy2026.controller;
 
 import com.lipari.Academy2026.dto.OrderDTO;
 import com.lipari.Academy2026.dto.OrderRequestDTO;
+import com.lipari.Academy2026.security.services.UserDetailsImpl;
 import com.lipari.Academy2026.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
-    //dummy
-    @PostMapping("/checkout/{userId}")
-    public ResponseEntity<OrderDTO> checkout(@RequestBody List<OrderRequestDTO> items, @PathVariable String userId) {
-        // In una versione reale con Spring Security, l'ID utente verrebbe dal SecurityContext
-        return ResponseEntity.ok(orderService.processCheckout(items, userId));
+
+    @PostMapping("/checkout")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<OrderDTO> checkout(@RequestBody List<OrderRequestDTO> items, Authentication authentication) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        // Poiché OrderServiceImpl aspetta una String userId, convertiamo l'ID se necessario 
+        // o adattiamo il service. UserDetailsImpl ha un Long id.
+        return ResponseEntity.ok(orderService.processCheckout(items, String.valueOf(userDetails.getId())));
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<OrderDTO>> getMyOrders(@PathVariable String userId) {
-        return ResponseEntity.ok(orderService.getOrdersByUserId(userId));
+    @GetMapping("/my-orders")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<List<OrderDTO>> getMyOrders(Authentication authentication) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        return ResponseEntity.ok(orderService.getOrdersByUserId(String.valueOf(userDetails.getId())));
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
     }

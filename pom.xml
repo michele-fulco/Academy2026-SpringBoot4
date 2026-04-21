@@ -158,7 +158,7 @@
 
 			        <url>jdbc:mysql://localhost:3306/academy2026?nullCatalogMeansCurrent=true</url>
 			        <username>root</username>
-			        <password>pass123</password>
+			        <password>root123</password>
 			        <driver>com.mysql.cj.jdbc.Driver</driver>
 			        <defaultSchemaName>academy2026</defaultSchemaName>
 			    </configuration>

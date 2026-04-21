@@ -1,54 +1,176 @@
 {
   "info": {
-    "_postman_id": "a1b2c3d4-e5f6-4a5b-bc6d-7e8f9a0b1c2d",
-    "name": "Academy2026 Spring Boot API",
-    "description": "Collection for testing the Academy2026 Spring Boot application endpoints.",
+    "_postman_id": "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+    "name": "Academy2026 Spring Boot API - Security Integrated",
+    "description": "Updated collection with Security, JWT Auth and revised Order endpoints.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
   },
   "item": [
     {
-      "name": "Category",
+      "name": "Auth",
       "item": [
         {
-          "name": "Get Category by ID",
+          "name": "Sign Up (User)",
           "request": {
-            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"mario_rossi\",\n    \"email\": \"mario@example.com\",\n    \"password\": \"password123\",\n    \"role\": [\"user\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": "{{baseUrl}}/api/Category/1",
+              "raw": "{{baseUrl}}/api/auth/signup",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
-                "Category",
-                "1"
+                "auth",
+                "signup"
               ]
             }
           }
         },
         {
-          "name": "Create Category",
+          "name": "Sign Up (Admin)",
           "request": {
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"Electronics\"\n}"
+              "raw": "{\n    \"username\": \"admin_user\",\n    \"email\": \"admin@example.com\",\n    \"password\": \"admin123\",\n    \"role\": [\"admin\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/Category/new",
+              "raw": "{{baseUrl}}/api/auth/signup",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
-                "Category",
+                "auth",
+                "signup"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sign In",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.accessToken) {",
+                  "    pm.environment.set(\"token\", jsonData.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"mario_rossi\",\n    \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/signin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "signin"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products (Public/Admin)",
+      "item": [
+        {
+          "name": "Get All Products (Public)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/product/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "product",
+                "products"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Product (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Nuovo Prodotto\",\n    \"description\": \"Descrizione\",\n    \"price\": 99.99,\n    \"brand\": \"Marca\",\n    \"imageUrl\": \"url\",\n    \"isNew\": true,\n    \"category\": {\n        \"id\": 1\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/product/new",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "product",
                 "new"
               ]
             }
@@ -57,57 +179,55 @@
       ]
     },
     {
-      "name": "Orders",
+      "name": "Orders (Authenticated)",
       "item": [
         {
-          "name": "Checkout",
+          "name": "Checkout (User/Admin)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "body": {
               "mode": "raw",
-              "raw": "[\n    {\n        \"productId\": 1,\n        \"quantity\": 2\n    },\n    {\n        \"productId\": 2,\n        \"quantity\": 1\n    }\n]"
+              "raw": "[\n    {\n        \"productId\": 1,\n        \"quantity\": 1\n    }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/orders/checkout/user123",
+              "raw": "{{baseUrl}}/api/orders/checkout",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "orders",
-                "checkout",
-                "user123"
+                "checkout"
               ]
             }
           }
         },
         {
-          "name": "Get User Orders",
+          "name": "Get My Orders (User/Admin)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/orders/user/user123",
+              "raw": "{{baseUrl}}/api/orders/my-orders",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "orders",
-                "user",
-                "user123"
+                "my-orders"
               ]
             }
           }
         },
         {
-          "name": "Get All Orders",
+          "name": "Get All Orders (Admin Only)",
           "request": {
             "method": "GET",
             "header": [],
@@ -126,225 +246,51 @@
       ]
     },
     {
-      "name": "Products",
+      "name": "Category",
       "item": [
         {
-          "name": "Get Product by ID (Param)",
+          "name": "Get Category (Public)",
           "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/product/product?t=1",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "product",
-                "product"
-              ],
-              "query": [
-                {
-                  "key": "t",
-                  "value": "1"
-                }
-              ]
-            }
-          }
-        },
-        {
-          "name": "Get All Products",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/product/products",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "product",
-                "products"
-              ]
-            }
-          }
-        },
-        {
-          "name": "Get Products by Title",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/product/get/Laptop",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "product",
-                "get",
-                "Laptop"
-              ]
-            }
-          }
-        },
-        {
-          "name": "Create Product",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"title\": \"Smartphone\",\n    \"description\": \"Latest model smartphone\",\n    \"price\": 799.99,\n    \"oldPrice\": 899.99,\n    \"brand\": \"TechBrand\",\n    \"imageUrl\"http://example.com/image.jpg\",\n    \"isNew\": true,\n    \"category\": {\n        \"id\": 1\n    }\n}"
+            "auth": {
+              "type": "noauth"
             },
-            "url": {
-              "raw": "{{baseUrl}}/api/product/new",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "product",
-                "new"
-              ]
-            }
-          }
-        },
-        {
-          "name": "Update Product",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"id\": 1,\n    \"title\": \"Smartphone Pro\",\n    \"description\": \"Updated description\",\n    \"price\": 849.99,\n    \"brand\": \"TechBrand\",\n    \"category\": \"id\": 1\n    }\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/product/update",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "product",
-                "update"
-              ]
-            }
-          }
-        },
-        {
-          "name": "Delete Product",
-          "request": {
-            "method": "DELETE",
+            "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/product/delete/1",
+              "raw": "{{baseUrl}}/api/Category/1",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
-                "product",
-                "delete",
+                "Category",
                 "1"
               ]
             }
           }
-        }
-      ]
-    },
-    {
-      "name": "Users",
-      "item": [
-        {
-          "name": "Get All Users",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/user/users",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "user",
-                "users"
-              ]
-            }
-          }
         },
         {
-          "name": "Get User by ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/user/user/user123",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "user",
-                "user",
-                "user123"
-              ]
-            }
-          }
-        },
-        {
-          "name": "Check Admin Status",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/user/isAdmin/user123",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "user",
-                "isAdmin",
-                "user123"
-              ]
-            }
-          }
-        },
-        {
-          "name": "Create User",
+          "name": "Create Category (Admin Only)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"John\",\n    \"surname\": \"Doe\",\n    \"username\": \"johndoe\",\n    \"password\": \"secret123\",\n    \"email\": \"john.doe@example.com\"\n}"
+              "raw": "{\n    \"name\": \"Nuova Categoria\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/user/new",
+              "raw": "{{baseUrl}}/api/Category/new",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
-                "user",
+                "Category",
                 "new"
               ]
             }
@@ -357,6 +303,11 @@
     {
       "key": "baseUrl",
       "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
       "type": "string"
     }
   ]

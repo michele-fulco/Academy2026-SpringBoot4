@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class ProductController {
     }
 
     @PostMapping("/new")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDTO> newProduct(@Valid @RequestBody ProductDTO productDTO) {
         try {
             return ResponseEntity.ok(this.productService.newProduct(productDTO));
@@ -52,6 +54,7 @@ public class ProductController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO) {
         try {
             // 1. Sostituisci il vecchio controllo IF con questo:
@@ -72,6 +75,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         try {
             this.productService.removeProduct(id);
