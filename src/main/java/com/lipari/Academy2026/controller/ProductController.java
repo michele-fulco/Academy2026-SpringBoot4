@@ -81,7 +81,16 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Cambia in 500 per ora
         }
     }
-
+    @PutMapping("/delete/{id}")
+    public ResponseEntity<Void> softDeletion(@PathVariable Long id) {
+        try {
+            this.productService.softDeletion(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace(); // <--- AGGIUNGI QUESTO per leggere l'errore nel terminale di IntelliJ/Eclipse
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Cambia in 500 per ora
+        }
+    }
     @GetMapping("/get/{title}")
     public ResponseEntity<List<ProductDTO>> getProductsByName(@PathVariable String title) {
         if (title != null) {

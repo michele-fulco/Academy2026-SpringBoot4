@@ -14,5 +14,6 @@ public class ProductDTO {
     String brand;
     String imageUrl;
     Boolean isNew;
+    Boolean deactivated;
     CategoryDTO category;
 }
