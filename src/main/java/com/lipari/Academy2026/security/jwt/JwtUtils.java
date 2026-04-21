@@ -1,6 +1,6 @@
 package com.lipari.Academy2026.security.jwt;
 
-import com.lipari.Academy2026.security.services.UserDetailsImpl;
+import com.lipari.Academy2026.entity.UserEntity;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -25,7 +25,7 @@ public class JwtUtils {
 
   public String generateJwtToken(Authentication authentication) {
 
-    UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+    UserEntity userPrincipal = (UserEntity) authentication.getPrincipal();
 
     return Jwts.builder()
         .setSubject((userPrincipal.getUsername()))

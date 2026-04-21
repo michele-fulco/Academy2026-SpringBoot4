@@ -2,7 +2,7 @@ package com.lipari.Academy2026.controller;
 
 import com.lipari.Academy2026.dto.OrderDTO;
 import com.lipari.Academy2026.dto.OrderRequestDTO;
-import com.lipari.Academy2026.security.services.UserDetailsImpl;
+import com.lipari.Academy2026.entity.UserEntity;
 import com.lipari.Academy2026.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +22,16 @@ public class OrderController {
     @PostMapping("/checkout")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<OrderDTO> checkout(@RequestBody List<OrderRequestDTO> items, Authentication authentication) {
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        UserEntity userDetails = (UserEntity) authentication.getPrincipal();
         // Poiché OrderServiceImpl aspetta una String userId, convertiamo l'ID se necessario 
-        // o adattiamo il service. UserDetailsImpl ha un Long id.
+        // o adattiamo il service. UserEntity ha un Long id.
         return ResponseEntity.ok(orderService.processCheckout(items, String.valueOf(userDetails.getId())));
     }
 
     @GetMapping("/my-orders")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<OrderDTO>> getMyOrders(Authentication authentication) {
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        UserEntity userDetails = (UserEntity) authentication.getPrincipal();
         return ResponseEntity.ok(orderService.getOrdersByUserId(String.valueOf(userDetails.getId())));
     }
 

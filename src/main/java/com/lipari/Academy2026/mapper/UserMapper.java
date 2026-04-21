@@ -7,6 +7,7 @@ import com.lipari.Academy2026.dto.UserResponseDTO;
 import com.lipari.Academy2026.entity.ProductEntity;
 import com.lipari.Academy2026.entity.UserEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -16,5 +17,7 @@ public interface UserMapper {
     UserResponseDTO toResponseDto(UserEntity userEntity);
     UserEntity toEntity(UserDTO userDTO);
     List<UserDTO> toDtoList(List<UserEntity> userEntityList);
+
+    @Mapping(target = "role", expression = "java(userEntity.getRoles().stream().findFirst().map(r -> r.getName().name()).orElse(null))")
     UserDTO toDto(UserEntity userEntity);
 }

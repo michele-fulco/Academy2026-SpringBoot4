@@ -9,7 +9,7 @@ import com.lipari.Academy2026.entity.UserEntity;
 import com.lipari.Academy2026.mapper.OrderMapper;
 import com.lipari.Academy2026.repository.OrderRepository;
 import com.lipari.Academy2026.repository.ProductRepository;
-import com.lipari.Academy2026.repository.UserRepositry;
+import com.lipari.Academy2026.repository.UserRepository;
 import com.lipari.Academy2026.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,13 +25,13 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
-    private final UserRepositry userRepositry;
+    private final UserRepository userRepository;
     private final OrderMapper orderMapper;
 
     @Override
     @Transactional
     public OrderDTO processCheckout(List<OrderRequestDTO> checkoutRequest, String userId) {
-        UserEntity user = userRepositry.findById(userId)
+        UserEntity user = userRepository.findById(Long.parseLong(userId))
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
         OrderEntity order = new OrderEntity();
@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> getOrdersByUserId(String userId) {
-        return orderMapper.toDtoList(orderRepository.findByUserId(userId));
+        return orderMapper.toDtoList(orderRepository.findByUserId(Long.parseLong(userId)));
     }
 
     @Override

@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lipari.Academy2026.entity.UserEntity;
 import com.lipari.Academy2026.model.ERole;
 import com.lipari.Academy2026.model.Role;
-import com.lipari.Academy2026.model.User;
 import com.lipari.Academy2026.payload.request.LoginRequest;
 import com.lipari.Academy2026.payload.request.SignupRequest;
 import com.lipari.Academy2026.payload.response.JwtResponse;
@@ -31,7 +31,6 @@ import com.lipari.Academy2026.payload.response.MessageResponse;
 import com.lipari.Academy2026.repository.RoleRepository;
 import com.lipari.Academy2026.repository.UserRepository;
 import com.lipari.Academy2026.security.jwt.JwtUtils;
-import com.lipari.Academy2026.security.services.UserDetailsImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -61,7 +60,7 @@ public class AuthController {
     SecurityContextHolder.getContext().setAuthentication(authentication);
     String jwt = jwtUtils.generateJwtToken(authentication);
     
-    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();    
+    UserEntity userDetails = (UserEntity) authentication.getPrincipal();    
     List<String> roles = userDetails.getAuthorities().stream()
         .map(GrantedAuthority::getAuthority)
         .collect(Collectors.toList());
@@ -88,9 +87,12 @@ public class AuthController {
     }
 
     // Create new user's account
-    User user = new User(signUpRequest.getUsername(), 
-               signUpRequest.getEmail(),
-               encoder.encode(signUpRequest.getPassword()));
+    UserEntity user = UserEntity.builder()
+            .username(signUpRequest.getUsername())
+            .email(signUpRequest.getEmail())
+            .password(encoder.encode(signUpRequest.getPassword()))
+            .active(true)
+            .build();
 
     Set<String> strRoles = signUpRequest.getRole();
     Set<Role> roles = new HashSet<>();
