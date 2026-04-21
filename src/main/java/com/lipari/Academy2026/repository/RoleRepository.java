@@ -1,7 +1,7 @@
 package com.lipari.Academy2026.repository;
 
-import com.lipari.Academy2026.model.ERole;
-import com.lipari.Academy2026.model.Role;
+import com.lipari.Academy2026.entity.ERole;
+import com.lipari.Academy2026.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

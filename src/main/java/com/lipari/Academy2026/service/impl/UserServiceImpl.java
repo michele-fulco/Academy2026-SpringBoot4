@@ -5,6 +5,9 @@ import com.lipari.Academy2026.dto.UserDTO;
 import com.lipari.Academy2026.entity.ProductEntity;
 import com.lipari.Academy2026.entity.UserEntity;
 import com.lipari.Academy2026.mapper.UserMapper;
+import com.lipari.Academy2026.entity.ERole;
+import com.lipari.Academy2026.entity.Role;
+import com.lipari.Academy2026.repository.RoleRepository;
 import com.lipari.Academy2026.repository.UserRepository;
 import com.lipari.Academy2026.service.UserService;
 
@@ -16,41 +19,53 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-@Transactional(readOnly = true)
+import java.util.Set;
+
 @AllArgsConstructor
 @Service
-public class UserServiceImpl implements UserService{
+@Transactional(readOnly = true)
+public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final RoleRepository roleRepository;
 
+    @Transactional
     @Override
-    public UserDTO newUser(String name, String surname, String password, String email, String username) {
+    public UserDTO newUser(UserDTO userDTO) {
+        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Errore: Ruolo ROLE_USER non trovato."));
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(userRole);
+
         UserEntity user = UserEntity.builder()
-                .email(email)
+                .email(userDTO.getEmail())
+                .username(userDTO.getUsername())
+                .name(userDTO.getName())
+                .surname(userDTO.getSurname())
+                .password(userDTO.getPassword())
                 .active(true)
                 .creationDate(LocalDateTime.now())
-                .lastLogin(null)
-                .roles(new HashSet<>()) // Dovrai gestire l'assegnazione dei ruoli reali qui
-                .username(username)
-                .name(name)
-                .surname(surname)
-                .password(password)
+                .roles(roles)
                 .build();
+
         user = this.userRepository.save(user);
         return this.userMapper.toDto(user);
-
     }
 
     @Override
     public boolean isAdmin(String id) {
-        Optional<UserEntity> user = this.userRepository.findById(Long.parseLong(id));
-        return user.map(userEntity -> userEntity.getRoles().stream()
-                .anyMatch(role -> role.getName().name().equals("ROLE_ADMIN"))).orElse(false);
+        return userRepository.findById(Long.parseLong(id))
+                .map(u -> u.getRoles().stream()
+                        .anyMatch(r -> r.getName() == ERole.ROLE_ADMIN))
+                .orElse(false);
     }
+
     public UserDTO getUser(String id) throws Exception {
 
         Optional<UserEntity> op = this.userRepository.findById(Long.parseLong(id));
-        if(op.isPresent()) {
+        if (op.isPresent()) {
             return this.userMapper.toDto(op.get());
         } else {
             throw new Exception("utente non trovato");

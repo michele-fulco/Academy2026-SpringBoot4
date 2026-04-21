@@ -42,7 +42,7 @@ public class UserController {
     @PostMapping("/new")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         try {
-            return ResponseEntity.ok(this.userService.newUser(userDTO.getName(), userDTO.getSurname(), userDTO.getPassword(), userDTO.getEmail(), userDTO.getUsername()));
+            return ResponseEntity.ok(this.userService.newUser(userDTO));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

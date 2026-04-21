@@ -1,6 +1,6 @@
 package com.lipari.Academy2026.entity;
 
-import com.lipari.Academy2026.model.Role;
+import com.lipari.Academy2026.entity.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -56,7 +56,7 @@ public class UserEntity implements UserDetails {
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @ToString.Exclude // Evita loop infiniti con il toString() di Role
+    @ToString.Exclude
     private Set<Role> roles = new HashSet<>();
 
     @Override

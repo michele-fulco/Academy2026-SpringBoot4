@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lipari.Academy2026.entity.UserEntity;
-import com.lipari.Academy2026.model.ERole;
-import com.lipari.Academy2026.model.Role;
+import com.lipari.Academy2026.entity.ERole;
+import com.lipari.Academy2026.entity.Role;
 import com.lipari.Academy2026.payload.request.LoginRequest;
 import com.lipari.Academy2026.payload.request.SignupRequest;
 import com.lipari.Academy2026.payload.response.JwtResponse;

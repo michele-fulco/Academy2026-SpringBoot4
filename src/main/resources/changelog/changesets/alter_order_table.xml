@@ -7,7 +7,7 @@
     </changeSet>
     <changeSet author="academy" id="1776561091290-2">
         <addColumn tableName="order_entity">
-            <column name="user_id" type="varchar(255)"/>
+            <column name="user_id" type="BIGINT"/>
         </addColumn>
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="order_entity"
