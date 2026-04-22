@@ -3,6 +3,7 @@ package com.lipari.Academy2026.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -11,6 +12,8 @@ public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
+    BigDecimal total;
 
     private java.time.LocalDateTime creationDate;
 

@@ -85,6 +85,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Cambia in 500 per ora
         }
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/delete/{id}")
     public ResponseEntity<Void> softDeletion(@PathVariable Long id) {
         try {

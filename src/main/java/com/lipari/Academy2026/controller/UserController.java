@@ -24,10 +24,10 @@ public class UserController {
     private UserService userService;
     private UserMapper userMapper;
 
-    @GetMapping("/isAdmin/{id}")
+    /*@GetMapping("/isAdmin/{id}")
     public boolean isAdmin(@PathVariable String id) {
         return this.userService.isAdmin(id);
-    }
+    }*/
 
     @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")

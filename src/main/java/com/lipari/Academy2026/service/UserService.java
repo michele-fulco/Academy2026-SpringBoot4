@@ -1,15 +1,18 @@
 package com.lipari.Academy2026.service;
 
 import com.lipari.Academy2026.dto.UserDTO;
+import com.lipari.Academy2026.payload.request.SignupRequest;
 
 import java.util.List;
 
 public interface UserService {
-    public UserDTO newUser(UserDTO userDTO);
+    UserDTO newUser(UserDTO userDTO);
 
-    public boolean isAdmin(String id);
+    UserDTO registerUser(SignupRequest signUpRequest);
 
-    public List<UserDTO> getUsers();
+    boolean isAdmin(String id);
 
-    public UserDTO getUser(String id) throws Exception;
+    List<UserDTO> getUsers();
+
+    UserDTO getUser(String id) throws Exception;
 }

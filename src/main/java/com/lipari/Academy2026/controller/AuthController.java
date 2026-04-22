@@ -28,9 +28,8 @@ import com.lipari.Academy2026.payload.request.LoginRequest;
 import com.lipari.Academy2026.payload.request.SignupRequest;
 import com.lipari.Academy2026.payload.response.JwtResponse;
 import com.lipari.Academy2026.payload.response.MessageResponse;
-import com.lipari.Academy2026.repository.RoleRepository;
-import com.lipari.Academy2026.repository.UserRepository;
 import com.lipari.Academy2026.security.jwt.JwtUtils;
+import com.lipari.Academy2026.service.UserService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -40,16 +39,10 @@ public class AuthController {
   AuthenticationManager authenticationManager;
 
   @Autowired
-  UserRepository userRepository;
+  JwtUtils jwtUtils;
 
   @Autowired
-  RoleRepository roleRepository;
-
-  @Autowired
-  PasswordEncoder encoder;
-
-  @Autowired
-  	JwtUtils jwtUtils;
+  UserService userService;
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -58,7 +51,7 @@ public class AuthController {
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
     String jwt = jwtUtils.generateJwtToken(authentication);
-    
+
     UserEntity userDetails = (UserEntity) authentication.getPrincipal();    
     List<String> roles = userDetails.getAuthorities().stream()
         .map(GrantedAuthority::getAuthority)
@@ -78,60 +71,13 @@ public class AuthController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest){
-    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-      return ResponseEntity
-          .badRequest()
-          .body(new MessageResponse("Error: Username is already taken!"));
+  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    try {
+      userService.registerUser(signUpRequest);
+      return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    } catch (RuntimeException e) {
+      return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
     }
-
-    if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-      return ResponseEntity
-          .badRequest()
-          .body(new MessageResponse("Error: Email is already in use!"));
-    }
-
-    // Create new user's account
-    UserEntity user = UserEntity.builder()
-            .username(signUpRequest.getUsername())
-            .email(signUpRequest.getEmail())
-            .password(encoder.encode(signUpRequest.getPassword()))
-            .active(true)
-            .build();
-
-    Set<String> strRoles = signUpRequest.getRole();
-    Set<Role> roles = new HashSet<>();
-
-    if (strRoles == null) {
-      Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-          .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-      roles.add(userRole);
-    } else {
-      strRoles.forEach(role -> {
-        switch (role) {
-        case "admin":
-          Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(adminRole);
-
-          break;
-        case "mod":
-          Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(modRole);
-
-          break;
-        default:
-          Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(userRole);
-        }
-      });
-    }
-
-    user.setRoles(roles);
-    userRepository.save(user);
-
-    return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
 }
+

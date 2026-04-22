@@ -7,11 +7,13 @@ import com.lipari.Academy2026.entity.UserEntity;
 import com.lipari.Academy2026.mapper.UserMapper;
 import com.lipari.Academy2026.entity.ERole;
 import com.lipari.Academy2026.entity.Role;
+import com.lipari.Academy2026.payload.request.SignupRequest;
 import com.lipari.Academy2026.repository.RoleRepository;
 import com.lipari.Academy2026.repository.UserRepository;
 import com.lipari.Academy2026.service.UserService;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder encoder;
 
     @Transactional
     @Override
@@ -44,7 +47,7 @@ public class UserServiceImpl implements UserService {
                 .username(userDTO.getUsername())
                 .name(userDTO.getName())
                 .surname(userDTO.getSurname())
-                .password(userDTO.getPassword())
+                .password(encoder.encode(userDTO.getPassword()))
                 .active(true)
                 .creationDate(LocalDateTime.now())
                 .roles(roles)
@@ -52,6 +55,35 @@ public class UserServiceImpl implements UserService {
 
         user = this.userRepository.save(user);
         return this.userMapper.toDto(user);
+    }
+
+    @Transactional
+    @Override
+    public UserDTO registerUser(SignupRequest signUpRequest) {
+        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+            throw new RuntimeException("Error: Username is already taken!");
+        }
+
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            throw new RuntimeException("Error: Email is already in use!");
+        }
+
+        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        Set<Role> roles = new HashSet<>();
+        roles.add(userRole);
+
+        UserEntity user = UserEntity.builder()
+                .username(signUpRequest.getUsername())
+                .email(signUpRequest.getEmail())
+                .password(encoder.encode(signUpRequest.getPassword()))
+                .active(true)
+                .creationDate(LocalDateTime.now())
+                .roles(roles)
+                .build();
+
+        user = userRepository.save(user);
+        return userMapper.toDto(user);
     }
 
     @Override

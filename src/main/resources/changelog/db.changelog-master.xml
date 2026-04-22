@@ -18,5 +18,7 @@
 <!--    <include file="/changesets/create_order_and_cart_table.xml" relativeToChangelogFile="true"/>-->
 <!--    <include file="/changesets/alter_order_table.xml" relativeToChangelogFile="true"/>-->
 <!--    <include file="/changesets/alter_user_and_role_table_creation.xml" relativeToChangelogFile="true"/>-->
-    <include file="/changesets/various_changes.xml" relativeToChangelogFile="true"/>
+<!--    <include file="/changesets/various_changes.xml" relativeToChangelogFile="true"/>-->
+<!--    <include file="/changesets/other_changes.xml" relativeToChangelogFile="true"/>-->
+    <include file="/changesets/next_diff.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

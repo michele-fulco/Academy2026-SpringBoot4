@@ -1,6 +1,8 @@
 package com.lipari.Academy2026.dto;
 
 import lombok.Data;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -9,4 +11,5 @@ public class OrderDTO {
     private Long id;
     private LocalDateTime creationDate;
     private List<CartDTO> items;
+    private BigDecimal total;
 }
