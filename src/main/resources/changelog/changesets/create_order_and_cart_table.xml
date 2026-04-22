@@ -144,4 +144,11 @@
         <modifyDataType columnName="price" newDataType="decimal(38,2)" tableName="product_entity"/>
     </changeSet>
 
+    <changeSet author="academy" id="fix-order-userid-type">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="order_entity" columnName="user_id"/>
+        </preConditions>
+        <modifyDataType tableName="order_entity" columnName="user_id" newDataType="BIGINT"/>
+    </changeSet>
+
 </databaseChangeLog>
