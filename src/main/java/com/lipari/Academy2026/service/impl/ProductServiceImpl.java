@@ -79,12 +79,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void softDeletion(Long id) throws Exception {
-        if (!productRepository.existsById(id)) {
-            throw new Exception("Prodotto da disattivare non trovato");
-        }
-        Optional<ProductEntity> p = this.productRepository.findById(id);
-        p.get().setDeactivated(!p.get().getDeactivated());
-        productRepository.save(p.get());
+        // 1. Cerchiamo il prodotto e lo estraiamo dall'Optional in un colpo solo
+        ProductEntity p = this.productRepository.findById(id)
+                .orElseThrow(() -> new Exception("Prodotto da disattivare non trovato"));
+
+        // 2. Gestione del valore NULL:
+        // Se getDeactivated() è null, lo trattiamo come false (attivo)
+        boolean isCurrentlyDeactivated = (p.getDeactivated() != null) && p.getDeactivated();
+
+        // 3. Invertiamo lo stato in sicurezza
+        p.setDeactivated(!isCurrentlyDeactivated);
+
+        // 4. Salviamo l'entità aggiornata
+        productRepository.save(p);
     }
     @Override
 
@@ -109,5 +116,12 @@ public class ProductServiceImpl implements ProductService {
         }
         return category;
     }
+
+    // Metodo specifico per lo Shop (solo prodotti attivi)
+    public List<ProductDTO> getActiveProducts() {
+        List<ProductEntity> list = this.productRepository.findByDeactivatedFalseOrDeactivatedIsNull();
+        return this.productMapper.toDtoList(list);
+    }
+
 
 }

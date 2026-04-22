@@ -20,6 +20,18 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    // Endpoint per lo Shop Pubblico
+    @GetMapping("/active")
+    public ResponseEntity<List<ProductDTO>> getActiveProducts() {
+        try {
+            return ResponseEntity.ok(this.productService.getActiveProducts());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+    }
+
+// GET /products rimane per la Dashboard Admin
+
     @GetMapping("/product")
     public ResponseEntity<ProductDTO> getProduct(@RequestParam Long t) {
 
@@ -99,4 +111,6 @@ public class ProductController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
+
+
 }

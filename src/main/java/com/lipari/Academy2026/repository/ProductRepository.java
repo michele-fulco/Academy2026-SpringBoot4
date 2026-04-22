@@ -12,6 +12,9 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
+
+    // Recupera solo i prodotti dove deactivated è false o null
+    List<ProductEntity> findByDeactivatedFalseOrDeactivatedIsNull();
 //    @Query("SELECT p FROM ProductEntity p WHERE "+
 //            "LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))")
 //    List<ProductEntity> searchProducts(String name);
@@ -23,3 +26,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     //void deleteById(Long id);
 
 }
+
+
