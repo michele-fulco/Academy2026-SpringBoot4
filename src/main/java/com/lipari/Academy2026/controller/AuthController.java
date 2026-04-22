@@ -49,11 +49,10 @@ public class AuthController {
   PasswordEncoder encoder;
 
   @Autowired
-  JwtUtils jwtUtils;
+  	JwtUtils jwtUtils;
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
     Authentication authentication = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -72,8 +71,14 @@ public class AuthController {
                          roles));
   }
 
+  @PostMapping("/signout")
+  public ResponseEntity<?> logoutUser() {
+    SecurityContextHolder.clearContext();
+    return ResponseEntity.ok(new MessageResponse("Log out successful!"));
+  }
+
   @PostMapping("/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest){
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
       return ResponseEntity
           .badRequest()

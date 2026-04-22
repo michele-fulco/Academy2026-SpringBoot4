@@ -30,10 +30,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderDTO processCheckout(List<OrderRequestDTO> checkoutRequest, String userId) {
-        UserEntity user = userRepository.findById(Long.parseLong(userId))
-                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
-
+    public OrderDTO processCheckout(List<OrderRequestDTO> checkoutRequest, UserEntity user) {
         OrderEntity order = new OrderEntity();
         order.setUser(user);
 
@@ -56,8 +53,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> getOrdersByUserId(String userId) {
-        return orderMapper.toDtoList(orderRepository.findByUserId(Long.parseLong(userId)));
+    public List<OrderDTO> getOrdersByUserId(Long userId) {
+        return orderMapper.toDtoList(orderRepository.findByUserId(userId));
     }
 
     @Override

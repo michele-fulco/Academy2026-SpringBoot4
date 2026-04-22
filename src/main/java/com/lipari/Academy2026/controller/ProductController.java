@@ -81,7 +81,7 @@ public class ProductController {
             this.productService.removeProduct(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            e.printStackTrace(); // <--- AGGIUNGI QUESTO per leggere l'errore nel terminale di IntelliJ/Eclipse
+        e.printStackTrace(); // <--- AGGIUNGI QUESTO per leggere l'errore nel terminale di IntelliJ/Eclipse
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Cambia in 500 per ora
         }
     }
