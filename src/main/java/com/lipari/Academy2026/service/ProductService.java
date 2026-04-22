@@ -22,4 +22,6 @@ public interface ProductService {
     public ProductDTO newProduct(ProductDTO productDTO);
 
     public void softDeletion(Long id) throws Exception;
+
+    public List<ProductDTO> getActiveProducts();
 }

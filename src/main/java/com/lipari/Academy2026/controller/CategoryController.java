@@ -68,8 +68,8 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteProduct(@RequestParam Long id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         try {
             this.categoryService.removeCategory(id);
             return ResponseEntity.ok().build();
