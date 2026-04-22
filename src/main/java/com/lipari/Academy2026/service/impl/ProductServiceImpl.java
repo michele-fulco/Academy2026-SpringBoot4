@@ -77,6 +77,16 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
     }
     @Override
+    @Transactional
+    public void softDeletion(Long id) throws Exception {
+        if (!productRepository.existsById(id)) {
+            throw new Exception("Prodotto da disattivare non trovato");
+        }
+        Optional<ProductEntity> p = this.productRepository.findById(id);
+        p.get().setDeactivated(!p.get().getDeactivated());
+        productRepository.save(p.get());
+    }
+    @Override
 
     public List<ProductDTO> getProductsByTitle(String title) {
         return this.productMapper.toDtoList(this.productRepository.findByTitleContainingIgnoreCase(title));
