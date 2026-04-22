@@ -24,6 +24,7 @@ public class ProductEntity {
     @Column(name="image_url")
     String imageUrl;
     Boolean isNew;
+    Boolean deactivated;
     /*@ManyToOne
     @JoinColumn(name = "user_id") //rinumona : seller id
     private UserEntity seller;*/

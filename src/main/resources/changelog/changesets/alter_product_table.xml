@@ -40,4 +40,9 @@
                       newColumnName="image_url"
                       columnDataType="VARCHAR(255)"/>
     </changeSet>
+    <changeSet id="20260421-10" author="academy">
+        <addColumn tableName="product_entity">
+            <column name="deactivated" type="BOOLEAN"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -20,4 +20,6 @@ public interface ProductService {
     public List<ProductDTO> getProductsByTitle(String title);
 
     public ProductDTO newProduct(ProductDTO productDTO);
+
+    public void softDeletion(Long id) throws Exception;
 }
