@@ -1,6 +1,10 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
     <changeSet author="academy" id="1776848870989-1">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="cart_entity"/></not>
+        </preConditions>
         <createTable tableName="cart_entity">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="cart_entityPK"/>
@@ -11,7 +15,11 @@
             <column name="product_id" type="BIGINT"/>
         </createTable>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-2">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="category_entity"/></not>
+        </preConditions>
         <createTable tableName="category_entity">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="category_entityPK"/>
@@ -19,7 +27,11 @@
             <column name="name" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-3">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="order_entity"/></not>
+        </preConditions>
         <createTable tableName="order_entity">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="order_entityPK"/>
@@ -29,7 +41,11 @@
             <column name="user_id" type="BIGINT"/>
         </createTable>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-4">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="product_entity"/></not>
+        </preConditions>
         <createTable tableName="product_entity">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="product_entityPK"/>
@@ -45,7 +61,11 @@
             <column name="category_id" type="BIGINT"/>
         </createTable>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-5">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="roles"/></not>
+        </preConditions>
         <createTable tableName="roles">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="rolesPK"/>
@@ -55,7 +75,11 @@
             </column>
         </createTable>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-6">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="user_roles"/></not>
+        </preConditions>
         <createTable tableName="user_roles">
             <column name="user_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="user_rolesPK"/>
@@ -65,7 +89,11 @@
             </column>
         </createTable>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-7">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="users"/></not>
+        </preConditions>
         <createTable tableName="users">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="usersPK"/>
@@ -80,31 +108,68 @@
             <column name="username" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-8">
+        <preConditions onFail="MARK_RAN">
+            <not><uniqueConstraintExists tableName="roles" constraintName="UC_ROLESNAME_COL"/></not>
+        </preConditions>
         <addUniqueConstraint columnNames="name" constraintName="UC_ROLESNAME_COL" tableName="roles"/>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-9">
+        <preConditions onFail="MARK_RAN">
+            <not><uniqueConstraintExists tableName="users" constraintName="UK6dotkott2kjsp8vw4d0m25fb7"/></not>
+        </preConditions>
         <addUniqueConstraint columnNames="email" constraintName="UK6dotkott2kjsp8vw4d0m25fb7" tableName="users"/>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-10">
+        <preConditions onFail="MARK_RAN">
+            <not><uniqueConstraintExists tableName="users" constraintName="UKr43af9ap4edm43mmtq01oddj6"/></not>
+        </preConditions>
         <addUniqueConstraint columnNames="username" constraintName="UKr43af9ap4edm43mmtq01oddj6" tableName="users"/>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-11">
+        <preConditions onFail="MARK_RAN">
+            <not><foreignKeyConstraintExists foreignKeyName="FK1aty8556l6ubkgne265npb41f"/></not>
+        </preConditions>
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="order_entity" constraintName="FK1aty8556l6ubkgne265npb41f" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-12">
+        <preConditions onFail="MARK_RAN">
+            <not><foreignKeyConstraintExists foreignKeyName="FK8kxxmqdokh3lthvw0t148w0bc"/></not>
+        </preConditions>
         <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="product_entity" constraintName="FK8kxxmqdokh3lthvw0t148w0bc" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="category_entity" validate="true"/>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-13">
+        <preConditions onFail="MARK_RAN">
+            <not><foreignKeyConstraintExists foreignKeyName="FKdjpjq4qgt7k0w8xofh30arev9"/></not>
+        </preConditions>
         <addForeignKeyConstraint baseColumnNames="product_id" baseTableName="cart_entity" constraintName="FKdjpjq4qgt7k0w8xofh30arev9" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="product_entity" validate="true"/>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-14">
+        <preConditions onFail="MARK_RAN">
+            <not><foreignKeyConstraintExists foreignKeyName="FKe5rowl9srrvo1uii368s40ufh"/></not>
+        </preConditions>
         <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="cart_entity" constraintName="FKe5rowl9srrvo1uii368s40ufh" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="order_entity" validate="true"/>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-15">
+        <preConditions onFail="MARK_RAN">
+            <not><foreignKeyConstraintExists foreignKeyName="FKh8ciramu9cc9q3qcqiv4ue8a6"/></not>
+        </preConditions>
         <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_roles" constraintName="FKh8ciramu9cc9q3qcqiv4ue8a6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="roles" validate="true"/>
     </changeSet>
+
     <changeSet author="academy" id="1776848870989-16">
+        <preConditions onFail="MARK_RAN">
+            <not><foreignKeyConstraintExists foreignKeyName="FKhfh9dx7w3ubf1co1vdev94g3f"/></not>
+        </preConditions>
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_roles" constraintName="FKhfh9dx7w3ubf1co1vdev94g3f" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
+
 </databaseChangeLog>

@@ -31,8 +31,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     try {
       String jwt = parseJwt(request);
+      logger.info("JWT estratto: {}", jwt); // <- aggiungi
       if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+        logger.info("JWT valido!"); // <- aggiungi
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        logger.info("Username: {}", username); // <- aggiungi
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken authentication =
@@ -43,6 +46,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+      } else {
+        logger.warn("JWT nullo o non valido"); // <- aggiungi
       }
     } catch (Exception e) {
       logger.error("Cannot set user authentication: {}", e);
