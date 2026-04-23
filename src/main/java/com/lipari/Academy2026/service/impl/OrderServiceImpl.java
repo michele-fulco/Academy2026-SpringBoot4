@@ -6,10 +6,10 @@ import com.lipari.Academy2026.entity.CartEntity;
 import com.lipari.Academy2026.entity.OrderEntity;
 import com.lipari.Academy2026.entity.ProductEntity;
 import com.lipari.Academy2026.entity.UserEntity;
+import com.lipari.Academy2026.exceptions.ResourceNotFoundException;
 import com.lipari.Academy2026.mapper.OrderMapper;
 import com.lipari.Academy2026.repository.OrderRepository;
 import com.lipari.Academy2026.repository.ProductRepository;
-import com.lipari.Academy2026.repository.UserRepository;
 import com.lipari.Academy2026.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,6 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
     private final OrderMapper orderMapper;
 
     @Override
@@ -36,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
 
         List<CartEntity> orderItems = checkoutRequest.stream().map(request -> {
             ProductEntity product = productRepository.findById(request.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Prodotto non trovato: " + request.getProductId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Prodotto non trovato con id: " + request.getProductId()));
 
             CartEntity item = new CartEntity();
             item.setProduct(product);

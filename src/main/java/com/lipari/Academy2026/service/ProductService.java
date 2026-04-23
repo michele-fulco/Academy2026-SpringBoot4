@@ -1,27 +1,23 @@
 package com.lipari.Academy2026.service;
 
-import com.lipari.Academy2026.dto.CategoryDTO;
 import com.lipari.Academy2026.dto.ProductDTO;
-
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface ProductService {
 
+    ProductDTO getProduct(Long id);
 
-    public ProductDTO getProduct(Long id) throws Exception;
+    List<ProductDTO> getProducts();
 
-    public List<ProductDTO> getProducts();
+    ProductDTO updateProduct(ProductDTO productDTO);
 
-    public ProductDTO updateProduct(ProductDTO productDTO) throws Exception;
+    void removeProduct(Long id);
 
-    public void removeProduct(Long id) throws Exception;
+    List<ProductDTO> getProductsByTitle(String title);
 
-    public List<ProductDTO> getProductsByTitle(String title);
+    ProductDTO newProduct(ProductDTO productDTO);
 
-    public ProductDTO newProduct(ProductDTO productDTO);
+    void softDeletion(Long id);
 
-    public void softDeletion(Long id) throws Exception;
-
-    public List<ProductDTO> getActiveProducts();
+    List<ProductDTO> getActiveProducts();
 }

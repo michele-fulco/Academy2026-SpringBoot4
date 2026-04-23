@@ -1,20 +1,19 @@
 package com.lipari.Academy2026.mapper;
 
 import com.lipari.Academy2026.dto.CategoryDTO;
-import com.lipari.Academy2026.dto.ProductDTO;
 import com.lipari.Academy2026.entity.CategoryEntity;
-import com.lipari.Academy2026.entity.ProductEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CategoryMapper {
 
-//    @Mapping(target = "products", ignore = true)
     CategoryDTO toDto(CategoryEntity pEntity);
 
+    @Mapping(target = "products", ignore = true)
     CategoryEntity toEntity(CategoryDTO pDto);
 
     List<CategoryDTO> toDtoList(List<CategoryEntity> cEntityList);

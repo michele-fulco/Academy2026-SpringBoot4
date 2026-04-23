@@ -26,6 +26,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.processCheckout(items, user));
     }
 
+
     @GetMapping("/my-orders")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<OrderDTO>> getMyOrders(@AuthenticationPrincipal UserEntity user) {

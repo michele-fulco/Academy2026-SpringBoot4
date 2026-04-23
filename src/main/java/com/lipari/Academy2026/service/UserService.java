@@ -14,5 +14,5 @@ public interface UserService {
 
     List<UserDTO> getUsers();
 
-    UserDTO getUser(String id) throws Exception;
+    UserDTO getUser(String id);
 }

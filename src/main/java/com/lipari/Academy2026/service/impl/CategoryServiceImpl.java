@@ -1,9 +1,8 @@
 package com.lipari.Academy2026.service.impl;
 
 import com.lipari.Academy2026.dto.CategoryDTO;
-import com.lipari.Academy2026.dto.ProductDTO;
 import com.lipari.Academy2026.entity.CategoryEntity;
-import com.lipari.Academy2026.entity.ProductEntity;
+import com.lipari.Academy2026.exceptions.ResourceNotFoundException;
 import com.lipari.Academy2026.mapper.CategoryMapper;
 import com.lipari.Academy2026.repository.CategoryRepository;
 import com.lipari.Academy2026.service.CategoryService;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -24,27 +22,19 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryMapper categoryMapper;
 
     @Override
+    @Transactional
     public CategoryDTO newCategory(String name) {
-
         CategoryEntity p = new CategoryEntity();
         p.setName(name);
-
         p = this.categoryRepository.save(p);
-
         return this.categoryMapper.toDto(p);
-
     }
 
     @Override
-    public CategoryDTO getCategory(Long id) throws Exception {
-
-        Optional<CategoryEntity> op = this.categoryRepository.findById(id);
-        if(op.isPresent()) {
-            return this.categoryMapper.toDto(op.get());
-        } else {
-            throw new Exception("prodotto non trovato");
-        }
-
+    public CategoryDTO getCategory(Long id) {
+        return this.categoryRepository.findById(id)
+                .map(this.categoryMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria con id " + id + " non trovata"));
     }
 
     @Override
@@ -55,23 +45,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CategoryDTO updateCategory(CategoryDTO categoryDTO) throws Exception{
-        Optional<CategoryEntity> op = this.categoryRepository.findById(categoryDTO.getId());
-        if (op.isPresent()){
-            CategoryEntity p = this.categoryMapper.toEntity(categoryDTO);
-            p.setName(categoryDTO.getName());
-            CategoryEntity temp = categoryRepository.save(p);
-            return this.categoryMapper.toDto(temp);
+    public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
+        if (!this.categoryRepository.existsById(categoryDTO.getId())) {
+            throw new ResourceNotFoundException("Categoria con id " + categoryDTO.getId() + " non in catalogo");
         }
-        else {
-            throw new Exception("Prodotto non in catalogo");
-        }
+        CategoryEntity p = this.categoryMapper.toEntity(categoryDTO);
+        CategoryEntity temp = categoryRepository.save(p);
+        return this.categoryMapper.toDto(temp);
     }
+
     @Override
     @Transactional
-    public void removeCategory(Long id) throws Exception {
+    public void removeCategory(Long id) {
         if (!categoryRepository.existsById(id)) {
-            throw new Exception("Prodotto da eliminare non trovato");
+            throw new ResourceNotFoundException("Categoria da eliminare con id " + id + " non trovata");
         }
         categoryRepository.deleteById(id);
     }

@@ -4,16 +4,15 @@ import com.lipari.Academy2026.dto.CategoryDTO;
 import com.lipari.Academy2026.dto.ProductDTO;
 import com.lipari.Academy2026.entity.CategoryEntity;
 import com.lipari.Academy2026.entity.ProductEntity;
+import com.lipari.Academy2026.exceptions.ResourceNotFoundException;
 import com.lipari.Academy2026.mapper.ProductMapper;
 import com.lipari.Academy2026.repository.CategoryRepository;
 import com.lipari.Academy2026.repository.ProductRepository;
 import com.lipari.Academy2026.service.ProductService;
-import jakarta.annotation.Nullable;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,70 +35,60 @@ public class ProductServiceImpl implements ProductService {
         return this.productMapper.toDto(p);
     }
 
-    public ProductDTO getProduct(Long id) throws Exception {
-
+    public ProductDTO getProduct(Long id) {
         Optional<ProductEntity> op = this.productRepository.findById(id);
         if(op.isPresent()) {
             return this.productMapper.toDto(op.get());
         } else {
-            throw new Exception("prodotto non trovato");
+            throw new ResourceNotFoundException("Prodotto con id " + id + " non trovato");
         }
-
     }
 
     public List<ProductDTO> getProducts() {
-
         List<ProductEntity> list = this.productRepository.findAll();
         return this.productMapper.toDtoList(list);
     }
 
     @Override
     @Transactional
-    public ProductDTO updateProduct(ProductDTO productDTO) throws Exception{
+    public ProductDTO updateProduct(ProductDTO productDTO) {
         Optional<ProductEntity> op = this.productRepository.findById(productDTO.getId());
         if (op.isPresent()){
             ProductEntity p = this.productMapper.toEntity(productDTO);
             p.setCategory(resolveCategory(productDTO.getCategory()));
             ProductEntity temp = productRepository.save(p);
             return this.productMapper.toDto(temp);
-        }
-        else {
-            throw new Exception("Prodotto non in catalogo");
+        } else {
+            throw new ResourceNotFoundException("Prodotto con id " + productDTO.getId() + " non in catalogo");
         }
     }
 
     @Override
     @Transactional
-    public void removeProduct(Long id) throws Exception {
+    public void removeProduct(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new Exception("Prodotto da eliminare non trovato");
+            throw new ResourceNotFoundException("Prodotto da eliminare con id " + id + " non trovato");
         }
         productRepository.deleteById(id);
     }
+
     @Override
     @Transactional
-    public void softDeletion(Long id) throws Exception {
-        // 1. Cerchiamo il prodotto e lo estraiamo dall'Optional in un colpo solo
+    public void softDeletion(Long id) {
         ProductEntity p = this.productRepository.findById(id)
-                .orElseThrow(() -> new Exception("Prodotto da disattivare non trovato"));
+                .orElseThrow(() -> new ResourceNotFoundException("Prodotto da disattivare con id " + id + " non trovato"));
 
-        // 2. Gestione del valore NULL:
-        // Se getDeactivated() è null, lo trattiamo come false (attivo)
         boolean isCurrentlyDeactivated = (p.getDeactivated() != null) && p.getDeactivated();
-
-        // 3. Invertiamo lo stato in sicurezza
         p.setDeactivated(!isCurrentlyDeactivated);
-
-        // 4. Salviamo l'entità aggiornata
         productRepository.save(p);
     }
-    @Override
 
+    @Override
     public List<ProductDTO> getProductsByTitle(String title) {
         return this.productMapper.toDtoList(this.productRepository.findByTitleContainingIgnoreCase(title));
     }
 
-    //Utils
+    // Utils
     private CategoryEntity resolveCategory(CategoryDTO categoryDTO) {
         CategoryEntity category = null;
         if (categoryDTO != null && categoryDTO.getName() != null) {
@@ -117,11 +106,8 @@ public class ProductServiceImpl implements ProductService {
         return category;
     }
 
-    // Metodo specifico per lo Shop (solo prodotti attivi)
     public List<ProductDTO> getActiveProducts() {
         List<ProductEntity> list = this.productRepository.findByDeactivatedFalseOrDeactivatedIsNull();
         return this.productMapper.toDtoList(list);
     }
-
-
 }

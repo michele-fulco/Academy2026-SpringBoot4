@@ -4,9 +4,7 @@ import com.lipari.Academy2026.dto.UserDTO;
 import com.lipari.Academy2026.entity.UserEntity;
 import com.lipari.Academy2026.mapper.UserMapper;
 import com.lipari.Academy2026.service.UserService;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,13 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 public class UserController {
 
-    private UserService userService;
-    private UserMapper userMapper;
-
-    /*@GetMapping("/isAdmin/{id}")
-    public boolean isAdmin(@PathVariable String id) {
-        return this.userService.isAdmin(id);
-    }*/
+    private final UserService userService;
+    private final UserMapper userMapper;
 
     @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
@@ -38,11 +31,7 @@ public class UserController {
     @GetMapping("/user/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
-        try {
-            return new ResponseEntity<>(this.userService.getUser(id),HttpStatus.OK);
-        } catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.ok(this.userService.getUser(id));
     }
 
     @GetMapping("/me")
@@ -53,10 +42,6 @@ public class UserController {
 
     @PostMapping("/new")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-        try {
-            return ResponseEntity.ok(this.userService.newUser(userDTO));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.newUser(userDTO));
     }
 }

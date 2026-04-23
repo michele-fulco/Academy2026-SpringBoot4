@@ -1,17 +1,16 @@
 package com.lipari.Academy2026.service.impl;
 
-import com.lipari.Academy2026.dto.ProductDTO;
 import com.lipari.Academy2026.dto.UserDTO;
-import com.lipari.Academy2026.entity.ProductEntity;
-import com.lipari.Academy2026.entity.UserEntity;
-import com.lipari.Academy2026.mapper.UserMapper;
 import com.lipari.Academy2026.entity.ERole;
 import com.lipari.Academy2026.entity.Role;
+import com.lipari.Academy2026.entity.UserEntity;
+import com.lipari.Academy2026.exceptions.BadRequestException;
+import com.lipari.Academy2026.exceptions.ResourceNotFoundException;
+import com.lipari.Academy2026.mapper.UserMapper;
 import com.lipari.Academy2026.payload.request.SignupRequest;
 import com.lipari.Academy2026.repository.RoleRepository;
 import com.lipari.Academy2026.repository.UserRepository;
 import com.lipari.Academy2026.service.UserService;
-
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -36,8 +34,16 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDTO newUser(UserDTO userDTO) {
+        if (userRepository.existsByUsername(userDTO.getUsername())) {
+            throw new BadRequestException("Errore: Username già in uso!");
+        }
+
+        if (userRepository.existsByEmail(userDTO.getEmail())) {
+            throw new BadRequestException("Errore: Email già in uso!");
+        }
+
         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Errore: Ruolo ROLE_USER non trovato."));
+                .orElseThrow(() -> new ResourceNotFoundException("Errore: Ruolo ROLE_USER non trovato."));
 
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
@@ -61,15 +67,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO registerUser(SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            throw new RuntimeException("Error: Username is already taken!");
+            throw new BadRequestException("Error: Username is already taken!");
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new RuntimeException("Error: Email is already in use!");
+            throw new BadRequestException("Error: Email is already in use!");
         }
 
         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Error: Role is not found."));
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
 
@@ -94,15 +100,11 @@ public class UserServiceImpl implements UserService {
                 .orElse(false);
     }
 
-    public UserDTO getUser(String id) throws Exception {
-
-        Optional<UserEntity> op = this.userRepository.findById(Long.parseLong(id));
-        if (op.isPresent()) {
-            return this.userMapper.toDto(op.get());
-        } else {
-            throw new Exception("utente non trovato");
-        }
-
+    @Override
+    public UserDTO getUser(String id) {
+        return this.userRepository.findById(Long.parseLong(id))
+                .map(this.userMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Utente con id " + id + " non trovato"));
     }
 
     @Override
@@ -111,4 +113,3 @@ public class UserServiceImpl implements UserService {
         return this.userMapper.toDtoList(list);
     }
 }
-
