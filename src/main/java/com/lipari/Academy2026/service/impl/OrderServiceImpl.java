@@ -106,11 +106,16 @@ public class OrderServiceImpl implements OrderService {
     }
     @Transactional
     @Override
-    public void softDelete (Long id){
+    public void softDelete(Long id) {
         OrderEntity orderEntity = this.orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Ordine da disabilitare con id "+id+" non trovato"));
-        boolean isCurrentlyDeactivated = (orderEntity.getDeactivated() != null) && orderEntity.getDeactivated();
+                .orElseThrow(() -> new ResourceNotFoundException("Ordine da disabilitare con id " + id + " non trovato"));
+
+        // Usiamo Boolean.TRUE.equals per gestire in sicurezza il valore null
+        // Se è null o false, diventa true. Se è true, diventa false.
+        boolean isCurrentlyDeactivated = Boolean.TRUE.equals(orderEntity.getDeactivated());
         orderEntity.setDeactivated(!isCurrentlyDeactivated);
-        orderRepository.save(orderEntity);
+
+        // Usiamo saveAndFlush per forzare l'aggiornamento immediato nel DB
+        this.orderRepository.saveAndFlush(orderEntity);
     }
 }

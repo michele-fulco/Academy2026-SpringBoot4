@@ -6,6 +6,7 @@ import com.lipari.Academy2026.entity.UserEntity;
 import com.lipari.Academy2026.exceptions.BadRequestException;
 import com.lipari.Academy2026.service.OrderService;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,7 +52,7 @@ public class OrderController {
     }
     @PutMapping("/disable/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> softDelete(@PathVariable Long id){
+    public ResponseEntity<Void> softDelete(@Valid @PathVariable Long id){
         this.orderService.softDelete(id);
         return ResponseEntity.ok().build();
     }

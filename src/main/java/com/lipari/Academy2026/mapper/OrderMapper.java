@@ -14,11 +14,13 @@ import java.util.List;
 public interface OrderMapper {
 
     @Mapping(source = "cartEntityList", target = "items")
+    @Mapping(source = "deactivated", target = "deactivated") // <-- AGGIUNGI QUESTA RIGA
     OrderDTO toDto(OrderEntity orderEntity);
 
     List<OrderDTO> toDtoList(List<OrderEntity> orderEntityList);
 
     @Mapping(source = "items", target = "cartEntityList")
+    @Mapping(source = "deactivated", target = "deactivated") // <-- AGGIUNGI ANCHE QUI per l'update
     @Mapping(target = "user", ignore = true)
     OrderEntity toEntity(OrderDTO orderDTO);
 

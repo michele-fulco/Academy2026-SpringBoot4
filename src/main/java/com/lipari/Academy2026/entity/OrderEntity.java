@@ -14,7 +14,10 @@ public class OrderEntity {
     Long id;
 
     BigDecimal total;
-    Boolean deactivated;
+
+    @Column(nullable = false)
+    Boolean deactivated = false;
+
     String username;
 
 
