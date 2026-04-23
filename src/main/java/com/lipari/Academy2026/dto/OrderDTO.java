@@ -11,5 +11,6 @@ public class OrderDTO {
     private Long id;
     private LocalDateTime creationDate;
     private List<CartDTO> items;
+    private Boolean deactivated;
     private BigDecimal total;
 }

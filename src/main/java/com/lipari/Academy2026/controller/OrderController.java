@@ -3,7 +3,9 @@ package com.lipari.Academy2026.controller;
 import com.lipari.Academy2026.dto.OrderDTO;
 import com.lipari.Academy2026.dto.OrderRequestDTO;
 import com.lipari.Academy2026.entity.UserEntity;
+import com.lipari.Academy2026.exceptions.BadRequestException;
 import com.lipari.Academy2026.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,9 +35,24 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrdersByUserId(user.getId()));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
+    }
+
+    @PutMapping("/update")
+    @PreAuthorize( "hasRole('ADMIN')")
+    public ResponseEntity<OrderDTO> updateOrder (@Valid OrderDTO orderDTO){
+        if (orderDTO.getId() == null || orderDTO.getId() <= 0 || orderDTO.getItems().isEmpty()) {
+            throw new BadRequestException("Dati ordine non validi per l'aggiornamento");
+        }
+        return ResponseEntity.ok(this.orderService.updateOrder(orderDTO));
+    }
+    @PutMapping("/disable")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> softDelete(@Valid Long id){
+        this.orderService.softDelete(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -15,6 +15,8 @@ public class OrderEntity {
 
     BigDecimal total;
 
+    Boolean deactivated;
+
     private java.time.LocalDateTime creationDate;
 
     @ManyToOne
