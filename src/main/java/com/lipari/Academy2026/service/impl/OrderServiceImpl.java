@@ -34,9 +34,16 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity order = new OrderEntity();
         order.setUser(user);
 
+        // Inizializziamo il totale a zero
+        final java.math.BigDecimal[] totalOrder = {java.math.BigDecimal.ZERO};
+
         List<CartEntity> orderItems = checkoutRequest.stream().map(request -> {
             ProductEntity product = productRepository.findById(request.getProductId())
                     .orElseThrow(() -> new RuntimeException("Prodotto non trovato: " + request.getProductId()));
+
+            // Calcoliamo il prezzo per questo item e lo aggiungiamo al totale
+            java.math.BigDecimal itemTotal = product.getPrice().multiply(java.math.BigDecimal.valueOf(request.getQuantity()));
+            totalOrder[0] = totalOrder[0].add(itemTotal);
 
             CartEntity item = new CartEntity();
             item.setProduct(product);
@@ -47,8 +54,9 @@ public class OrderServiceImpl implements OrderService {
         }).collect(Collectors.toList());
 
         order.setCartEntityList(orderItems);
-        OrderEntity savedOrder = orderRepository.save(order);
+        order.setTotal(totalOrder[0]); // <--- SETTIAMO IL TOTALE CALCOLATO
 
+        OrderEntity savedOrder = orderRepository.save(order);
         return orderMapper.toDto(savedOrder);
     }
 
