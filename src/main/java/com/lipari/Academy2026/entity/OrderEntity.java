@@ -14,10 +14,12 @@ public class OrderEntity {
     Long id;
 
     BigDecimal total;
-    Boolean deactivated;
+
+    @Column(nullable = false)
+    Boolean deactivated = false;
+
     String username;
 
-    Boolean deactivated;
 
     private java.time.LocalDateTime creationDate;
 
