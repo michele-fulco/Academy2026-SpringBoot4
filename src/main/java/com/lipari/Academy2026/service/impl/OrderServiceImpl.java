@@ -37,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO processCheckout(List<OrderRequestDTO> checkoutRequest, UserEntity user) {
         OrderEntity order = new OrderEntity();
         order.setUser(user);
+        order.setUsername(user.getUsername());
 
         // Inizializziamo il totale a zero
         final java.math.BigDecimal[] totalOrder = {java.math.BigDecimal.ZERO};
@@ -61,6 +62,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotal(totalOrder[0]); // <--- SETTIAMO IL TOTALE CALCOLATO
 
         OrderEntity savedOrder = orderRepository.save(order);
+
         return orderMapper.toDto(savedOrder);
     }
 

@@ -14,6 +14,8 @@ public class OrderEntity {
     Long id;
 
     BigDecimal total;
+    Boolean deactivated;
+    String username;
 
     Boolean deactivated;
 
