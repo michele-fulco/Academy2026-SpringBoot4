@@ -14,5 +14,7 @@ public interface UserService {
 
     List<UserDTO> getUsers();
 
-    UserDTO getUser(String id);
+    UserDTO getUser(Long id);
+    UserDTO updateUser(UserDTO userDTO);
+    void softDelete(Long id);
 }

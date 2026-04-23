@@ -43,15 +43,15 @@ public class OrderController {
 
     @PutMapping("/update")
     @PreAuthorize( "hasRole('ADMIN')")
-    public ResponseEntity<OrderDTO> updateOrder (@Valid OrderDTO orderDTO){
+    public ResponseEntity<OrderDTO> updateOrder (@Valid @RequestBody OrderDTO orderDTO){
         if (orderDTO.getId() == null || orderDTO.getId() <= 0 || orderDTO.getItems().isEmpty()) {
             throw new BadRequestException("Dati ordine non validi per l'aggiornamento");
         }
         return ResponseEntity.ok(this.orderService.updateOrder(orderDTO));
     }
-    @PutMapping("/disable")
+    @PutMapping("/disable/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> softDelete(@Valid Long id){
+    public ResponseEntity<Void> softDelete(@PathVariable Long id){
         this.orderService.softDelete(id);
         return ResponseEntity.ok().build();
     }

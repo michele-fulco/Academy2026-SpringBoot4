@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -101,10 +102,48 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO getUser(String id) {
-        return this.userRepository.findById(Long.parseLong(id))
+    public UserDTO getUser(Long id) {
+        return this.userRepository.findById((id))
                 .map(this.userMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Utente con id " + id + " non trovato"));
+    }
+
+    @Override
+    @Transactional
+    public UserDTO updateUser(UserDTO userDTO) {
+        UserEntity userEntity = this.userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Utente con id " + userDTO.getId() + " non registrato"));
+
+        Optional<UserEntity> usernameCheck = this.userRepository.findByUsername(userDTO.getUsername());
+        Optional<UserEntity> emailCheck = this.userRepository.findByEmail(userDTO.getEmail());
+
+        if (usernameCheck.isPresent() && !userEntity.getId().equals(usernameCheck.get().getId())) {
+            throw new BadRequestException("Error: Username is already taken!");
+        }
+        if (emailCheck.isPresent() && !userEntity.getId().equals(emailCheck.get().getId())) {
+            throw new BadRequestException("Error: Email is already in use!");
+        }
+
+        userEntity.setUsername(userDTO.getUsername());
+        userEntity.setEmail(userDTO.getEmail());
+        userEntity.setName(userDTO.getName());
+        userEntity.setSurname(userDTO.getSurname());
+        
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            userEntity.setPassword(encoder.encode(userDTO.getPassword()));
+        }
+
+        UserEntity update = userRepository.save(userEntity);
+        return this.userMapper.toDto(update);
+    }
+
+    @Override
+    @Transactional
+    public void softDelete(Long id) {
+        UserEntity user = this.userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Utente con id " + id + " non trovato"));
+        user.setActive(!user.getActive());
+        userRepository.save(user);
     }
 
     @Override

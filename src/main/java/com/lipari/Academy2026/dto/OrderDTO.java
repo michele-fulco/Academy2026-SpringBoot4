@@ -14,5 +14,4 @@ public class OrderDTO {
     private List<CartDTO> items;
     private Boolean deactivated;
     private BigDecimal total;
-    private Boolean deactivated;
 }

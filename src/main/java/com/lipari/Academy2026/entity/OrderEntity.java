@@ -17,7 +17,6 @@ public class OrderEntity {
     Boolean deactivated;
     String username;
 
-    Boolean deactivated;
 
     private java.time.LocalDateTime creationDate;
 
