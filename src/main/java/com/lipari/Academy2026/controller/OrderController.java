@@ -33,7 +33,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrdersByUserId(user.getId()));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
